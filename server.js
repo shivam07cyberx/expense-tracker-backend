@@ -35,16 +35,21 @@ const db = require("./db");
 
 const app = express();
 
-// CORS Configuration: Allow your frontend URL for CORS requests
+// CORS Configuration
 app.use(cors({
-    origin: "https://shivam07cyberx.github.io", // Set allowed origin to the frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow methods that you'll use
-    allowedHeaders: "Content-Type, Authorization", // Allow headers for JSON and Auth
-    credentials: true // Allow cookies (if needed)
+    origin: "https://shivam07cyberx.github.io",  // Allow frontend domain
+    methods: ["GET", "POST", "PUT", "DELETE"],  // Allow required HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"],  // Allow required headers
+    credentials: true,  // Enable credentials if you're using cookies or tokens
+    preflightContinue: false,  // Ensure preflight requests are handled properly
+    optionsSuccessStatus: 204  // Send 204 response for preflight requests
 }));
 
 // Middleware
-app.use(express.json());  // Use built-in middleware to handle JSON requests
+app.use(bodyParser.json());  // Handle JSON requests
+
+// Handle preflight requests (OPTIONS)
+app.options('*', cors());
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
