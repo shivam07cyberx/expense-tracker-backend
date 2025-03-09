@@ -38,8 +38,9 @@ const app = express();
 // Allow frontend domain for CORS
 app.use(cors({
     origin: "https://shivam07cyberx.github.io", // Allow your frontend domain
-    methods: "GET,POST",
-    allowedHeaders: "Content-Type"
+    methods: "GET, POST",                      // Allow GET and POST methods
+    allowedHeaders: "Content-Type",            // Allow Content-Type header
+    credentials: true                          // Allow credentials like cookies/tokens
 }));
 
 // Middleware
@@ -52,7 +53,11 @@ const expenseRoutes = require("./routes/expenseRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
 
+// Catching OPTIONS preflight requests
+app.options('*', cors()); // This is important to allow preflight requests for all routes
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
