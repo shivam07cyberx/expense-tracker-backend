@@ -48,8 +48,11 @@ app.use(cors({
 // Middleware
 app.use(bodyParser.json());  // Handle JSON requests
 
-// Handle preflight requests (OPTIONS)
-app.options('*', cors());
+// Handle preflight requests (OPTIONS) with logging
+app.options('*', (req, res) => {
+    console.log("Preflight OPTIONS request received from:", req.get('Origin'));
+    res.status(204).end();  // Preflight response with 204 status
+});
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
