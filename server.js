@@ -31,27 +31,29 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const db = require("./db"); // This is where you require the updated db.js
+const db = require("./db");
 
 const app = express();
 
-// Enable CORS for all routes and allow specific frontend domain
+// CORS Configuration: Allow your frontend URL for CORS requests
 app.use(cors({
-    origin: "https://shivam07cyberx.github.io",  // Allow your frontend domain
-    methods: ["GET", "POST", "PUT", "DELETE"],  // Allow specific HTTP methods
-    allowedHeaders: "Content-Type, Authorization"  // Allow necessary headers
+    origin: "https://shivam07cyberx.github.io", // Set allowed origin to the frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow methods that you'll use
+    allowedHeaders: "Content-Type, Authorization", // Allow headers for JSON and Auth
+    credentials: true // Allow cookies (if needed)
 }));
 
 // Middleware
-app.use(express.json());  // Built-in Express middleware to parse JSON (instead of body-parser)
+app.use(express.json());  // Use built-in middleware to handle JSON requests
 
-// Import Routes
+// Routes
 const authRoutes = require("./routes/authRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
