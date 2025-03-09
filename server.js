@@ -35,16 +35,15 @@ const db = require("./db"); // This is where you require the updated db.js
 
 const app = express();
 
-// Allow frontend domain for CORS
+// Enable CORS for all routes and allow specific frontend domain
 app.use(cors({
-    origin: "https://shivam07cyberx.github.io", // Allow your frontend domain
-    methods: "GET, POST",                      // Allow GET and POST methods
-    allowedHeaders: "Content-Type",            // Allow Content-Type header
-    credentials: true                          // Allow credentials like cookies/tokens
+    origin: "https://shivam07cyberx.github.io",  // Allow your frontend domain
+    methods: ["GET", "POST", "PUT", "DELETE"],  // Allow specific HTTP methods
+    allowedHeaders: "Content-Type, Authorization"  // Allow necessary headers
 }));
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());  // Built-in Express middleware to parse JSON (instead of body-parser)
 
 // Import Routes
 const authRoutes = require("./routes/authRoutes");
@@ -52,9 +51,6 @@ const expenseRoutes = require("./routes/expenseRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
-
-// Catching OPTIONS preflight requests
-app.options('*', cors()); // This is important to allow preflight requests for all routes
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
